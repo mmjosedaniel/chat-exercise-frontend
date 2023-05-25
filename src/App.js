@@ -1,9 +1,11 @@
 import './App.css';
 
+import ChatScreen from './components/ChatScreen';
+
 function App() {
   return (
     <div>
-			<h1>This is my chat</h1>
+			<ChatScreen />
     </div>
   );
 }
