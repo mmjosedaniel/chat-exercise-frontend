@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import openSocket from 'socket.io-client'
 
 const ChatScreen = () => {
 	const [messages, setMessages] = useState([]);
@@ -57,6 +58,20 @@ const ChatScreen = () => {
 
 		setNewMessage('')
 	};
+
+	const addMessage = message => {
+		setMessages(prevState => [...prevState, message])
+	};
+
+	useEffect(() => {
+		const socket = openSocket('http://localhost:8080')
+		socket.on('messages', data => {
+			if(data.action === 'create') {
+				console.log({data})
+				addMessage(data.newMessage);
+			}
+		})
+	}, []);
 
 	useEffect(() => {
 		fetchMessages();
