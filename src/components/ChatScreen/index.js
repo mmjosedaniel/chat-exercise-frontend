@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import openSocket from 'socket.io-client'
 
-const ChatScreen = () => {
+const ChatScreen = ({ token, userId }) => {
 	const [messages, setMessages] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -30,7 +30,11 @@ const ChatScreen = () => {
 		setIsLoading(true);
 		setError(null);
 		try {
-			const response = await fetch('http://localhost:8080/');
+			const response = await fetch('http://localhost:8080/', {
+				headers: {
+					Authorization: 'Bearer ' + token
+				}
+			});
 			if(!response.ok) {
 				throw new Error('Something whent wrong.')
 			} 
@@ -41,7 +45,7 @@ const ChatScreen = () => {
 			setError(error.message);
 		};
 		setIsLoading(false);
-	}, []);
+	}, [token]);
 
 	const addMessageHandler = async() => {
 		const response = await fetch('http://localhost:8080/message', {
@@ -50,7 +54,8 @@ const ChatScreen = () => {
 				text: newMessage
 			}),
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + token
 			}
 		});
 		const data = await response.json()
