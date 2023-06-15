@@ -11,9 +11,9 @@ const ChatScreen = ({ token, userId }) => {
 	let content = <p>Write a message to star</p>;
 
 	if(messages.length > 0) {
-		content = messages.map(({message, id}) => (
+		content = messages.map(({message, id, creator}) => (
 			<div key={id} >
-				<p>{message}</p>
+				<p><span><strong>{creator}:</strong></span> {message}</p>
 			</div>
 		))
 	}
@@ -39,6 +39,8 @@ const ChatScreen = ({ token, userId }) => {
 				throw new Error('Something whent wrong.')
 			} 
 			const data = await response.json();
+
+			console.log(data);
 
 			setMessages(data.messages);
 		} catch (error) {
